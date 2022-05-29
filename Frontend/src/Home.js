@@ -13,6 +13,10 @@ import axios from "axios";
 
 const Home = () => {
 
+  let mail = ''
+  let name = ''
+  let password = ''
+
   const url = 'http://localhost:5000/users';
   
   const [users, setUsers] = useState(null);
@@ -22,6 +26,24 @@ const Home = () => {
     .then((response) => {
       setUsers(response.data)
     })
+  }
+  function DelUser(id){
+    axios.delete(url+String(id))
+    
+  }
+
+
+  function PostUser(e){
+    e.preventDefault();
+    axios.post(url,{
+      name,
+      mail,
+      password
+    })
+    mail = ''
+    name = ''
+    password = ''
+    GetUser()
   }
 
   useEffect(() => {
@@ -46,6 +68,7 @@ const Home = () => {
               <td>{user["name"]}</td>
               <td>{user["mail"]}</td>
               <td>{user["password"]}</td>
+              <td><button class="btn btn-danger" onClick={/*DelUser(user["_id"])*/()=>{}}>DELETE</button></td>
             </tr>
           </tbody>
     ))
@@ -78,10 +101,13 @@ const Home = () => {
       </div>
       <div className="justify-content-right">
         <form className="mb-3">
-          <input type="text" placeholder="Name" className="px-md-10"/>
-          <input type="email" placeholder="Email" className="px-md-10"/>
-          <input type="password" placeholder="Password" className="px-md-10"/>
-          <input type="submit" value="Submit" class="btn btn-success"/>
+          <table>
+            <td></td>
+            <td><input type="text" placeholder="Name" className="px-md-10" onChange={(e)=>{name=e.target.value}}/></td>
+            <td><input type="email" placeholder="Email" className="px-md-10" onChange={(e)=>{mail=e.target.value}}/></td>
+            <td><input type="password" placeholder="Password" className="px-md-10" onChange={(e)=>{password=e.target.value}}/></td>
+            <td><input type="submit" value="Submit" class="btn btn-success" onClick={PostUser}/></td>
+          </table>
         </form>
       </div>
     </div>
