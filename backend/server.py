@@ -77,12 +77,12 @@ def update(id):
         if(dbResponse.modified_count == 1):
             return Response(
             response=json.dumps({"message":"updated user!", "id":str(ObjectId(id))}),
-            status=500, mimetype="application/json"
+            status=200, mimetype="application/json"
         ) 
         else:
             return Response(
             response=json.dumps({"message":"Nothing to update!"}),
-            status=500, mimetype="application/json"
+            status=200, mimetype="application/json"
         ) 
 
 
@@ -126,12 +126,12 @@ def delete_user(id):
         if(dbResponse.deleted_count == 1):
             return Response(
             response=json.dumps({"message":"User deleted!","id":str(ObjectId(id))}),
-            status=500, mimetype="application/json"
+            status=200, mimetype="application/json"
         ) 
         else:
             return Response(
             response=json.dumps({"message":"User not found!","id":str(ObjectId(id))}),
-            status=500, mimetype="application/json"
+            status=200, mimetype="application/json"
         ) 
 
 

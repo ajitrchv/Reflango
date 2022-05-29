@@ -9,9 +9,9 @@ POST http://localhost:5000/users HTTP/1.1
 content-type: application/json
 
 {
-    "name":"Arjun",
-    "mail":"arjunkumar77898@gmail.com",
-    "password":"9847549790"
+    "name":"JaegerMaester",
+    "mail":"Jmaster@gmail.com",
+    "password":"since1878"
 }
 ###
 

@@ -11,9 +11,9 @@ import {
 import axios from "axios";
 
 const Home = () => {
-  let mail = useRef();
-  let name = useRef();
-  let password = useRef();
+  let mail = ''
+  let name = ''
+  let password = ''
 
   const url = "http://localhost:5000/users";
 
@@ -21,6 +21,7 @@ const Home = () => {
 
   function GetUser() {
     axios.get(url).then((response) => {
+      if(response)
       setUsers(response.data);
     });
   }
@@ -32,17 +33,17 @@ const Home = () => {
       mail,
       password,
     });
-    GetUser();
+    GetUser()
   }
 
-  function DelUser(id, e) {
-    e.preventDefault();
-    axios
-      .delete(`http://localhost:5000/users/${id}`)
-      .then((res) => console.log("deleting user", res))
-      .catch((err) => {
-        console.log(err);
-      });
+  async function DelUser(id){
+  try
+  {
+      let result = await axios
+      .delete(`http://localhost:5000/users/${id}`);
+    console.log(result.response.data)
+  }
+  catch(err){}
     GetUser();
   }
 
@@ -51,38 +52,43 @@ const Home = () => {
       setUsers(response.data);
     });
   }, [url]);
-  let data = "nothing to show";
-  if (users) {
+
+  let data;
+  
+  if(users === null){
+  console.log("***************************",users)
+  data = "nothing to show"
+  return
+}
+  else {
     data = (
       <div>
-        <table class="table">
+        <table className="table">
           <thead>
             <th scope="col">Name</th>
             <th scope="col">Mail</th>
             <th scope="col">How about showing password?</th>
           </thead>
-          {users.map((user, i) => (
-            <tbody>
+          
+          
+          {
+          users.map((user, i) => (
+            <tbody key={i}>
               <tr>
                 <td>{user["name"]}</td>
                 <td>{user["mail"]}</td>
                 <td>{user["password"]}</td>
                 <td>
                   <button
-                    class="btn btn-danger"
-                    onClick={DelUser(String(user["_id"]))}
+                    className="btn btn-danger" onClick={(e) => DelUser(String(user["_id"]))}
                   >
                     DELETE
                   </button>
                 </td>
-                {/* <td>
-                  <button class="btn btn-danger" onClick={() => {}}>
-                    DELETE
-                  </button>
-                </td> */}
               </tr>
             </tbody>
-          ))}
+          ))
+          }
         </table>
       </div>
     );
@@ -103,7 +109,7 @@ const Home = () => {
         {data}
         <div></div>
         <br />
-        <button class="btn btn-primary" variant="dark" onClick={GetUser}>
+        <button className="btn btn-primary" variant="dark" onClick={GetUser}>
           GET
         </button>
         <br />
@@ -112,7 +118,6 @@ const Home = () => {
         <br />
         <form className="justify-content-center mb-3">
           <input
-            ref={name}
             type="text"
             placeholder="Name"
             className="px-md-10"
@@ -122,7 +127,6 @@ const Home = () => {
           />
 
           <input
-            ref={mail}
             type="email"
             placeholder="Email"
             className="px-md-10"
@@ -132,7 +136,6 @@ const Home = () => {
           />
           <span>
           <input
-            ref={password}
             type="password"
             placeholder="Password"
             className="px-md-10"
@@ -147,7 +150,7 @@ const Home = () => {
           <input
             type="submit"
             value="Submit"
-            class="btn btn-success"
+            className="btn btn-success"
             onClick={PostUser}
           />
         </form>
