@@ -26,14 +26,14 @@ const Home = () => {
     });
   }
 
-  function PostUser(e) {
+  async function PostUser(e) {
     e.preventDefault();
-    axios.post(url, {
+    await axios.post(url, {
       name,
       mail,
       password,
     });
-    GetUser()
+    await GetUser()
   }
 
   async function DelUser(id){
@@ -75,7 +75,7 @@ const Home = () => {
           users.map((user, i) => (
             <tbody key={i}>
               <tr>
-                <td>{user["name"]}</td>
+                <td>{(user["name"])}</td>
                 <td>{user["mail"]}</td>
                 <td>{user["password"]}</td>
                 <td>
