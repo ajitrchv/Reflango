@@ -1,0 +1,25 @@
+GET http://localhost:5000/users
+
+###
+GET http://localhost:5000/users
+###
+DELETE http://localhost:5000/users/629209fe7b3d65f9423527d9
+###
+POST http://localhost:5000/users HTTP/1.1
+content-type: application/json
+
+{
+    "name":"Arjun",
+    "mail":"arjunkumar77898@gmail.com",
+    "password":"9847549790"
+}
+###
+
+PATCH http://localhost:5000/users/62908b8be05db73217f65b73 HTTP/1.1
+content-type: application/json
+
+{
+    "name":"Ajith",
+    "mail":"ajithvreji@gmail.com",
+    "password":"0644"
+}
