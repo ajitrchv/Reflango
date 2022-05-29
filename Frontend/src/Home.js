@@ -26,14 +26,14 @@ const Home = () => {
     });
   }
 
-  function PostUser(e) {
+  async function PostUser(e) {
     e.preventDefault();
-    axios.post(url, {
+    await axios.post(url, {
       name,
       mail,
       password,
     });
-    GetUser()
+    await GetUser()
   }
 
   async function DelUser(id){
