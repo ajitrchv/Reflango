@@ -15,6 +15,10 @@ const Home = () => {
   let name = ''
   let password = ''
 
+  let toggle = true
+
+  let toggleButtonData = ''
+
   const url = "http://localhost:5000/users";
 
   const [users, setUsers] = useState(null);
@@ -25,6 +29,8 @@ const Home = () => {
       setUsers(response.data);
     });
   }
+
+
 
   async function PostUser(e) {
     e.preventDefault();
@@ -47,6 +53,17 @@ const Home = () => {
     GetUser();
   }
 
+
+  async function login(mail,password){
+    try{
+      let result = await axios.get(`http://localhost:5000/users/${mail}`)
+      .then(result => {if(result.response.data["password"] === password){
+        console.log("*********************login sucessful**************************")
+      }})
+    }
+    catch(err){console.log(err,"******************************")}
+  }
+
   useEffect(() => {
     axios.get(url).then((response) => {
       setUsers(response.data);
@@ -56,7 +73,6 @@ const Home = () => {
   let data;
   
   if(users === null){
-  console.log("***************************",users)
   data = "nothing to show"
   return
 }
@@ -94,6 +110,99 @@ const Home = () => {
     );
   }
 
+  let signupform = 
+    <div>
+  <div className="justify-content-left">
+  <br />
+  <div></div>
+  {data}
+  <div></div>
+  <br />
+  <button className="btn btn-primary" variant="dark" onClick={GetUser}>
+    GET
+  </button>
+  <br />
+</div>
+<div className="justify-content-center">
+  <br />
+  <form className="justify-content-center mb-3">
+    <input
+      type="text"
+      placeholder="Name"
+      className="px-md-10"
+      onChange={(e) => {
+        name = e.target.value;
+      }}
+    />
+
+    <input
+      type="email"
+      placeholder="Email"
+      className="px-md-10"
+      onChange={(e) => {
+        mail = e.target.value;
+      }}
+    />
+    <span>
+    <input
+      type="password"
+      placeholder="Password"
+      className="px-md-10"
+      onChange={(e) => {
+        password = e.target.value;
+      }}
+    />
+    </span>
+    <br />
+    <div/>
+    <br />
+    <input
+      type="submit"
+      value="Submit"
+      className="btn btn-success"
+      onClick={PostUser}
+    />
+  </form>
+</div>
+</div>
+
+
+let loginform = <div>
+
+      <form>
+        <br />
+        <br />
+      <input
+      type="email"
+      placeholder="Email"
+      className="px-md-10"
+      onChange={(e) => {
+        mail = e.target.value;
+      }}
+    />
+    <input
+      type="password"
+      placeholder="Password"
+      className="px-md-10"
+      onChange={(e) => {
+        password = e.target.value;
+      }}
+    />
+    <br />
+    <div/>
+    <br />
+    <input
+      type="submit"
+      value="Submit"
+      className="btn btn-primary"
+      onClick={login()}
+    />
+      </form>
+
+</div>
+
+toggleButtonData = toggle?'Log In':'Sign Up'
+
   return (
     <div>
       <Navbar
@@ -103,58 +212,18 @@ const Home = () => {
       >
         <Navbar.Brand>Reflango</Navbar.Brand>
       </Navbar>
-      <div className="justify-content-left">
-        <br />
-        <div></div>
-        {data}
-        <div></div>
-        <br />
-        <button className="btn btn-primary" variant="dark" onClick={GetUser}>
-          GET
-        </button>
-        <br />
-      </div>
-      <div className="justify-content-center">
-        <br />
-        <form className="justify-content-center mb-3">
-          <input
-            type="text"
-            placeholder="Name"
-            className="px-md-10"
-            onChange={(e) => {
-              name = e.target.value;
-            }}
-          />
+      
 
-          <input
-            type="email"
-            placeholder="Email"
-            className="px-md-10"
-            onChange={(e) => {
-              mail = e.target.value;
-            }}
-          />
-          <span>
-          <input
-            type="password"
-            placeholder="Password"
-            className="px-md-10"
-            onChange={(e) => {
-              password = e.target.value;
-            }}
-          />
-          </span>
-          <br />
-          <div/>
-          <br />
-          <input
-            type="submit"
-            value="Submit"
-            className="btn btn-success"
-            onClick={PostUser}
-          />
-        </form>
-      </div>
+      {toggle?loginform:signupform}
+
+      <br/>
+      <br/>
+      <button className="btn btn-primary" onClick={()=>{toggle=!toggle}}>{toggleButtonData}</button>
+
+    
+    
+
+
     </div>
   );
 };

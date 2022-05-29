@@ -95,10 +95,10 @@ def update(id):
         ) 
 ################################################################
 
-@app.route("/users/<id>",methods=["GET"])
-def find_user(id):
+@app.route("/users/<mail>",methods=["GET"])
+def find_user(mail):
     try:
-        data=(db.users.find_one({"_id":ObjectId(id)}))
+        data=(db.users.find_one({"mail":mail}))
         #data["_id"]=str(ObjectId(data["_id"]))
         return Response(
             response=json.dumps({
