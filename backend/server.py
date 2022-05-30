@@ -42,6 +42,13 @@ def get_user():
 
 @app.route("/users", methods=["POST"])
 def add_user():
+    if(db.users.find_one({"mail":request.json["mail"]})):
+         return Response(
+            response=json.dumps({"message":"user exists!"}),
+            status=200,
+            mimetype="application/json"
+        )
+    
     try:
         user={
             "name":request.json["name"],
@@ -50,7 +57,7 @@ def add_user():
             }
         dbResponse = db.users.insert_one(user)
         return Response(
-            response=json.dumps({"message":f"added user {dbResponse.inserted_id}"}),
+            response=json.dumps({"message":dbResponse.inserted_id}),
             status=200,
             mimetype="application/json"
         )
@@ -95,26 +102,27 @@ def update(id):
         ) 
 ################################################################
 
-@app.route("/users/<id>",methods=["GET"])
-def find_user(id):
+@app.route("/users/mail",methods=["POST"])
+def find_user():
     try:
-        data=(db.users.find_one({"_id":ObjectId(id)}))
+        data=(db.users.find_one({"mail":request.json["mail"]}))
         #data["_id"]=str(ObjectId(data["_id"]))
         return Response(
             response=json.dumps({
                 "name":data["name"],
                 "mail":data["mail"],
                 "password":data["password"],
+                "message":"user found"
             }),
-            status=500, mimetype="application/json"
+            status=200, mimetype="application/json"
             )
 
     
     except Exception as ex:
         print(ex)
         return Response(
-            response=json.dumps({"message":"unable to get the user data!"}),
-            status=500, mimetype="application/json"
+            response=json.dumps({"message":"user not found"}),
+            status=200, mimetype="application/json"
         ) 
 
 ####################################################################
