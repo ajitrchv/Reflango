@@ -9,6 +9,8 @@ import {
   form,
 } from "react-bootstrap";
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Home = () => {
   let mail = "";
@@ -24,6 +26,8 @@ const Home = () => {
   const [signErr, setSignErr] = useState(null);
 
   const [users, setUsers] = useState(null);
+
+
 
   function GetUser() {
     axios.get(url).then((response) => {
@@ -64,7 +68,8 @@ const Home = () => {
       .then((res) =>{
         if((res.data["message"]==='user found') && (res.data["password"]===password)){
           
-          alert('Login succesful')
+          alert('Login Successful')
+
           setToggle(false)
         
         }
