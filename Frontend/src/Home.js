@@ -15,13 +15,17 @@ const Home = () => {
   let name = ''
   let password = ''
 
-  let toggle = true
+  const [toggle, setToggle] = useState(true)
 
   let toggleButtonData = ''
 
   const url = "http://localhost:5000/users";
 
+  const [signErr, setSignErr] = useState(null);
+
   const [users, setUsers] = useState(null);
+
+
 
   function GetUser() {
     axios.get(url).then((response) => {
@@ -38,10 +42,23 @@ const Home = () => {
       name,
       mail,
       password,
-    });
+    }).then(res =>{
+      if( res.data["message"]==="user exists!" ){
+        console.log("*******************",(res.data["message"]))
+        setSignErr(<div class="p-3 mb-2 bg-danger text-white"><p>This mail is already registred. Please proceed with another.</p></div>)
+      }
+      else{
+        setSignErr(<div class="p-3 mb-2 bg-success text-white">Success</div>)
+      }
+    }
+    );
     await GetUser()
   }
 
+  
+  
+  
+  
   async function DelUser(id){
   try
   {
@@ -53,16 +70,6 @@ const Home = () => {
     GetUser();
   }
 
-
-  async function login(mail,password){
-    try{
-      let result = await axios.get(`http://localhost:5000/users/${mail}`)
-      .then(result => {if(result.response.data["password"] === password){
-        console.log("*********************login sucessful**************************")
-      }})
-    }
-    catch(err){console.log(err,"******************************")}
-  }
 
   useEffect(() => {
     axios.get(url).then((response) => {
@@ -110,9 +117,12 @@ const Home = () => {
     );
   }
 
+
+
   let signupform = 
     <div>
   <div className="justify-content-left">
+  {signErr}
   <br />
   <div></div>
   {data}
@@ -195,13 +205,13 @@ let loginform = <div>
       type="submit"
       value="Submit"
       className="btn btn-primary"
-      onClick={login()}
+      onClick={(e)=>login(mail, password, e)}
     />
       </form>
 
 </div>
 
-toggleButtonData = toggle?'Log In':'Sign Up'
+toggleButtonData = toggle?'Sign Up':'Log In'
 
   return (
     <div>
@@ -218,7 +228,12 @@ toggleButtonData = toggle?'Log In':'Sign Up'
 
       <br/>
       <br/>
-      <button className="btn btn-primary" onClick={()=>{toggle=!toggle}}>{toggleButtonData}</button>
+      <button type="button" class="btn btn-outline-dark" onClick={()=>{
+
+        setToggle(!toggle)
+
+
+        }}>{toggleButtonData}</button>
 
     
     

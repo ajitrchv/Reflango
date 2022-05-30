@@ -42,6 +42,13 @@ def get_user():
 
 @app.route("/users", methods=["POST"])
 def add_user():
+    if(db.users.find_one({"mail":request.json["mail"]})):
+         return Response(
+            response=json.dumps({"message":"user exists!"}),
+            status=200,
+            mimetype="application/json"
+        )
+    
     try:
         user={
             "name":request.json["name"],
